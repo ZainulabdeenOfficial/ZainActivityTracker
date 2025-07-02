@@ -1,0 +1,27 @@
+name: Daily Activity Logger
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # Runs daily at 10AM PKT
+  workflow_dispatch:
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Git
+        run: |
+          git config --global user.name "ZainulabdeenOfficial"
+          git config --global user.email "zu4425@gmail.com"
+
+      - name: Update Activity Log
+        run: |
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          echo "{\"timestamp\": \"$TIMESTAMP\"}" >> activity.json
+          git add activity.json
+          git commit -m "📈 Daily activity update - $TIMESTAMP"
+          git push https://ZainulabdeenOfficial:${{ secrets.PERSONAL_TOKEN }}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
