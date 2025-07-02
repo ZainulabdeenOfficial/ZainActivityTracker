@@ -2,7 +2,7 @@ name: Daily Activity Logger
 
 on:
   schedule:
-    - cron: '0 5 * * *'  # Runs daily at 10AM PKT
+    - cron: '0 5 * * *'  # Runs daily at 10AM Pakistan time
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set Up Git
+      - name: Set Up Git Identity
         run: |
           git config --global user.name "ZainulabdeenOfficial"
           git config --global user.email "zu4425@gmail.com"
@@ -23,5 +23,11 @@ jobs:
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           echo "{\"timestamp\": \"$TIMESTAMP\"}" >> activity.json
           git add activity.json
-          git commit -m "📈 Daily activity update - $TIMESTAMP"
-          git push https://ZainulabdeenOfficial:${{ secrets.PERSONAL_TOKEN }}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
+          git commit -m "📈 Daily activity update - $TIMESTAMP" || echo "No changes to commit"
+
+      - name: Push Changes
+        env:
+          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+        run: |
+          git remote set-url origin https://ZainulabdeenOfficial:${TOKEN}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
+          git push origin main
