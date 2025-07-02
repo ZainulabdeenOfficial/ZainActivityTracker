@@ -2,7 +2,7 @@ name: Daily Commit Logger
 
 on:
   schedule:
-    - cron: '0 5 * * *'  # Runs daily at 10AM PKT
+    - cron: '0 5 * * *'  # Daily at 10AM PKT
   workflow_dispatch:
 
 jobs:
@@ -18,15 +18,13 @@ jobs:
           git config --global user.name "ZainulabdeenOfficial"
           git config --global user.email "zu4425@gmail.com"
 
-      - name: Make daily log entry
+      - name: Update log file
         run: |
           echo "{\"timestamp\": \"$(date '+%Y-%m-%d %H:%M:%S')\"}" >> activity.json
           git add activity.json
-          git commit -m "📈 Daily activity update - $(date '+%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
+          git commit -m "📈 Daily activity update - $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
-      - name: Push changes using PAT
-        env:
-          MY_PAT: ${{ secrets.MY_PAT }}
+      - name: Push with Personal Access Token
         run: |
-          git remote set-url origin https://ZainulabdeenOfficial:${MY_PAT}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
+          git remote set-url origin https://ZainulabdeenOfficial:${{ secrets.MY_PAT }}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
           git push origin main
