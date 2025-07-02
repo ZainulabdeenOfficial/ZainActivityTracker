@@ -2,7 +2,7 @@ name: Daily Activity Logger
 
 on:
   schedule:
-    - cron: '0 5 * * *'  # Runs daily at 10AM Pakistan time
+    - cron: '0 5 * * *'  # 10AM PKT
   workflow_dispatch:
 
 jobs:
@@ -13,19 +13,19 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set Up Git Identity
+      - name: Set Git Identity
         run: |
           git config --global user.name "ZainulabdeenOfficial"
           git config --global user.email "zu4425@gmail.com"
 
-      - name: Update Activity Log
+      - name: Append Log Entry
         run: |
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           echo "{\"timestamp\": \"$TIMESTAMP\"}" >> activity.json
           git add activity.json
           git commit -m "📈 Daily activity update - $TIMESTAMP" || echo "No changes to commit"
 
-      - name: Push Changes
+      - name: Push Changes with PAT
         env:
           TOKEN: ${{ secrets.PERSONAL_TOKEN }}
         run: |
