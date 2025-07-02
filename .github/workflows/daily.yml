@@ -26,7 +26,7 @@ jobs:
 
       - name: Push changes using PAT
         env:
-          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          MY_PAT: ${{ secrets.MY_PAT }}
         run: |
-          git remote set-url origin https://ZainulabdeenOfficial:${TOKEN}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
+          git remote set-url origin https://ZainulabdeenOfficial:${MY_PAT}@github.com/ZainulabdeenOfficial/ZainActivityTracker.git
           git push origin main
